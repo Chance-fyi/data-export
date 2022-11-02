@@ -1,0 +1,6 @@
+# apply name
+name = "data-export"
+# whether to enter debugging mode
+debug = false
+# timezone configuration
+timezone = "Asia/Shanghai"

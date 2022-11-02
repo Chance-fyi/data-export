@@ -1,0 +1,8 @@
+# Redis key
+redisKey = "jwt-token"
+# 签名
+secret = "chance.fyi"
+# 过期时间 秒
+ttl = 86400
+# 刷新过期时间 秒
+refreshTtl = 604800

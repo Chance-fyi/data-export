@@ -1,0 +1,12 @@
+# debug info warn error , affected by debugging mode
+level = "error"
+# log save path
+filename = "runtime/logs/logs.log"
+# maximum size of each log file, unit: M
+maxSize = 10
+# the maximum number of saved log files, 0 is unlimited
+maxBackups = 5
+# how many days save at most，0 means not to delete
+maxAge = 30
+# compress or not
+compress = false
