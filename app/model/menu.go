@@ -2,9 +2,11 @@ package model
 
 import "time"
 
-type User struct {
+type Menu struct {
 	Id         uint
-	Username   string
-	Password   string
+	Name       string
+	Path       string
+	Icon       string
+	ParentId   uint
 	CreateTime time.Time `gorm:"autoCreateTime"`
 }

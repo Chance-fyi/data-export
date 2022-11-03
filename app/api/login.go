@@ -15,7 +15,15 @@ type RefreshTokenResponse struct {
 	Token string `json:"token"`
 }
 
+type UsesMenuList struct {
+	Name   string         `json:"name"`
+	Path   string         `json:"path"`
+	Icon   string         `json:"icon"`
+	Routes []UsesMenuList `json:"routes"`
+}
+
 type GetUserInfoResponse struct {
-	Id       uint   `json:"id"`
-	Username string `json:"username"`
+	Id       uint           `json:"id"`
+	Username string         `json:"username"`
+	Menu     []UsesMenuList `json:"menu"`
 }
