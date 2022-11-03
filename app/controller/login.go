@@ -68,5 +68,6 @@ func GetUserInfo(ctx *gin.Context) {
 	response.Success(ctx, "", api.GetUserInfoResponse{
 		Id:       user.Id,
 		Username: user.Username,
+		Menu:     service.UsesMenuList(ctx, nil, 0),
 	})
 }
