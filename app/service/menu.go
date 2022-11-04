@@ -11,12 +11,28 @@ func CreateMenu(r api.CreateMenuRequest) error {
 	menu := model.Menu{
 		Name:     r.Name,
 		Path:     r.Path,
-		Icon:     r.Icon,
 		ParentId: r.ParentId,
 	}
 	err := g.DB().Create(&menu).Error
 
 	return err
+}
+
+func EditMenu(r api.EditMenuRequest) error {
+	menu := model.Menu{
+		Id:       r.Id,
+		Name:     r.Name,
+		Path:     r.Path,
+		ParentId: r.ParentId,
+	}
+	err := g.DB().Model(&menu).Updates(menu).Error
+
+	return err
+}
+
+func GetMenu(id uint) (menu api.GetMenuResponse) {
+	g.DB().Model(&model.Menu{}).First(&menu, id)
+	return
 }
 
 func MenuList(r api.MenuListRequest) (menus []api.MenuListItem, count int64) {
@@ -61,7 +77,6 @@ func UsesMenuList(ctx *gin.Context, menus []model.Menu, parentId uint) (tree []a
 			tree = append(tree, api.UsesMenuList{
 				Name:   menu.Name,
 				Path:   menu.Path,
-				Icon:   menu.Icon,
 				Routes: UsesMenuList(ctx, menus, menu.Id),
 			})
 		}

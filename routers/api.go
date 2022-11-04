@@ -25,6 +25,8 @@ func Init(r *gin.Engine) {
 			menu := api.Group("/menu")
 			{
 				menu.POST("create", controller.CreateMenu)
+				menu.POST("edit", controller.EditMenu)
+				menu.GET("get", controller.GetMenu)
 				menu.GET("list", controller.MenuList)
 				menu.GET("selectTree", controller.MenuSelectTree)
 			}
