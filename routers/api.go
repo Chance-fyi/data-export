@@ -19,7 +19,10 @@ func Init(r *gin.Engine) {
 
 			user := api.Group("/user")
 			{
+				user.GET("list", controller.UserList)
 				user.POST("create", controller.CreateUser)
+				user.GET("get", controller.GetUser)
+				user.POST("edit", controller.EditUser)
 			}
 
 			menu := api.Group("/menu")

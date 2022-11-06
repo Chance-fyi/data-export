@@ -7,7 +7,6 @@ import (
 	"data-export/pkg/response"
 	"data-export/pkg/validator"
 	"github.com/gin-gonic/gin"
-	"time"
 )
 
 func CreateUser(ctx *gin.Context) {
@@ -19,9 +18,8 @@ func CreateUser(ctx *gin.Context) {
 	}
 
 	err = service.CreateUser(model.User{
-		Username:   r.Username,
-		Password:   r.Password,
-		CreateTime: time.Now(),
+		Username: r.Username,
+		Password: r.Password,
 	})
 	if err != nil {
 		response.Error(ctx, err.Error())
@@ -29,4 +27,43 @@ func CreateUser(ctx *gin.Context) {
 	}
 
 	response.Success(ctx, "创建成功")
+}
+
+func UserList(ctx *gin.Context) {
+	var r api.UserListRequest
+	_ = ctx.ShouldBind(&r)
+
+	users, count := service.UserList(r)
+
+	response.Success(ctx, "", api.UserListResponse{
+		Total: count,
+		Data:  users,
+	})
+}
+
+func GetUser(ctx *gin.Context) {
+	var r api.GetUserRequest
+	err := ctx.ShouldBind(&r)
+	if err != nil {
+		response.Error(ctx, "", validator.ProcessErr(r, err))
+		return
+	}
+	menu := service.GetUser(r.Id)
+	response.Success(ctx, "", menu)
+}
+
+func EditUser(ctx *gin.Context) {
+	var r api.EditUserRequest
+	err := ctx.ShouldBind(&r)
+	if err != nil {
+		response.Error(ctx, "", validator.ProcessErr(r, err))
+		return
+	}
+	err = service.EditUser(r)
+	if err != nil {
+		response.Error(ctx, err.Error())
+		return
+	}
+
+	response.Success(ctx, "修改成功")
 }
