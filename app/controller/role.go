@@ -2,25 +2,21 @@ package controller
 
 import (
 	"data-export/app/api"
-	"data-export/app/model"
 	"data-export/app/service"
 	"data-export/pkg/response"
 	"data-export/pkg/validator"
 	"github.com/gin-gonic/gin"
 )
 
-func CreateUser(ctx *gin.Context) {
-	var r api.CreateUserRequest
+func CreateRole(ctx *gin.Context) {
+	var r api.CreateRoleRequest
 	err := ctx.ShouldBind(&r)
 	if err != nil {
 		response.Error(ctx, "", validator.ProcessErr(r, err))
 		return
 	}
 
-	err = service.CreateUser(model.User{
-		Username: r.Username,
-		Password: r.Password,
-	})
+	err = service.CreateRole(r)
 	if err != nil {
 		response.Error(ctx, err.Error())
 		return
@@ -29,37 +25,37 @@ func CreateUser(ctx *gin.Context) {
 	response.Success(ctx, "创建成功")
 }
 
-func UserList(ctx *gin.Context) {
-	var r api.UserListRequest
+func RoleList(ctx *gin.Context) {
+	var r api.RoleListRequest
 	_ = ctx.ShouldBind(&r)
 
-	users, count := service.UserList(r)
+	roles, count := service.RoleList(r)
 
-	response.Success(ctx, "", api.UserListResponse{
+	response.Success(ctx, "", api.RoleListResponse{
 		Total: count,
-		Data:  users,
+		Data:  roles,
 	})
 }
 
-func GetUser(ctx *gin.Context) {
-	var r api.GetUserRequest
+func GetRole(ctx *gin.Context) {
+	var r api.GetRoleRequest
 	err := ctx.ShouldBind(&r)
 	if err != nil {
 		response.Error(ctx, "", validator.ProcessErr(r, err))
 		return
 	}
-	user := service.GetUser(r.Id)
-	response.Success(ctx, "", user)
+	role := service.GetRole(r.Id)
+	response.Success(ctx, "", role)
 }
 
-func EditUser(ctx *gin.Context) {
-	var r api.EditUserRequest
+func EditRole(ctx *gin.Context) {
+	var r api.EditRoleRequest
 	err := ctx.ShouldBind(&r)
 	if err != nil {
 		response.Error(ctx, "", validator.ProcessErr(r, err))
 		return
 	}
-	err = service.EditUser(r)
+	err = service.EditRole(r)
 	if err != nil {
 		response.Error(ctx, err.Error())
 		return

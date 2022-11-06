@@ -16,4 +16,5 @@ func Init() {
 	initValidator()
 
 	initJwt()
+	initCasbin()
 }

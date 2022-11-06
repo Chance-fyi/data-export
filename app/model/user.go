@@ -7,4 +7,5 @@ type User struct {
 	Username   string
 	Password   string
 	CreateTime time.Time `gorm:"autoCreateTime"`
+	UpdateTime time.Time `gorm:"autoUpdateTime"`
 }

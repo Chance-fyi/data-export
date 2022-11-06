@@ -33,6 +33,14 @@ func Init(r *gin.Engine) {
 				menu.GET("list", controller.MenuList)
 				menu.GET("selectTree", controller.MenuSelectTree)
 			}
+
+			role := api.Group("/role")
+			{
+				role.POST("create", controller.CreateRole)
+				role.GET("list", controller.RoleList)
+				role.GET("get", controller.GetRole)
+				role.POST("edit", controller.EditRole)
+			}
 		}
 	}
 }

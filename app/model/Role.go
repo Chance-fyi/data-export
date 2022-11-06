@@ -2,11 +2,9 @@ package model
 
 import "time"
 
-type Menu struct {
+type Role struct {
 	Id         uint
 	Name       string
-	Path       string
-	ParentId   uint
 	CreateTime time.Time `gorm:"autoCreateTime"`
 	UpdateTime time.Time `gorm:"autoUpdateTime"`
 }

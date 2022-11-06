@@ -13,6 +13,7 @@ func init() {
 		Path       string `gorm:"comment:Path;type:varchar(50)"`
 		ParentId   uint   `gorm:"default:0"`
 		CreateTime time.Time
+		UpdateTime time.Time
 	}
 
 	migrate.Add(migrate.MigrationFile{

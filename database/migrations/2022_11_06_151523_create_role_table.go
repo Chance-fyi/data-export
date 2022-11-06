@@ -7,21 +7,20 @@ import (
 )
 
 func init() {
-	type User struct {
+	type Role struct {
 		Id         uint   `gorm:"primarykey"`
-		Username   string `gorm:"comment:用户名;type:varchar(50);uniqueIndex"`
-		Password   string `gorm:"comment:密码;type:char(60)"`
+		Name       string `gorm:"comment:名称;type:varchar(50);uniqueIndex"`
 		CreateTime time.Time
 		UpdateTime time.Time
 	}
 
 	migrate.Add(migrate.MigrationFile{
-		FileName: "2022_10_24_150902_create_user_table",
+		FileName: "2022_11_06_151523_create_role_table",
 		Up: func(db *gorm.DB) error {
-			return db.Migrator().AutoMigrate(&User{})
+			return db.Migrator().AutoMigrate(&Role{})
 		},
 		Down: func(db *gorm.DB) error {
-			return db.Migrator().DropTable(&User{})
+			return db.Migrator().DropTable(&Role{})
 		},
 	}, "default")
 }
