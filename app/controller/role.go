@@ -63,3 +63,8 @@ func EditRole(ctx *gin.Context) {
 
 	response.Success(ctx, "修改成功")
 }
+
+func UserRoleList(ctx *gin.Context) {
+	list := service.UserRoleList()
+	response.Success(ctx, "", list)
+}

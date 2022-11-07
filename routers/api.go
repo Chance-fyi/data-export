@@ -40,6 +40,7 @@ func Init(r *gin.Engine) {
 				role.GET("list", controller.RoleList)
 				role.GET("get", controller.GetRole)
 				role.POST("edit", controller.EditRole)
+				role.GET("userRoleList", controller.UserRoleList)
 			}
 		}
 	}

@@ -2,7 +2,6 @@ package controller
 
 import (
 	"data-export/app/api"
-	"data-export/app/model"
 	"data-export/app/service"
 	"data-export/pkg/response"
 	"data-export/pkg/validator"
@@ -17,10 +16,7 @@ func CreateUser(ctx *gin.Context) {
 		return
 	}
 
-	err = service.CreateUser(model.User{
-		Username: r.Username,
-		Password: r.Password,
-	})
+	err = service.CreateUser(r)
 	if err != nil {
 		response.Error(ctx, err.Error())
 		return

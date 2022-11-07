@@ -45,6 +45,9 @@ func GetRole(id uint) (role api.GetRoleResponse) {
 
 	policies := g.Casbin().GetFilteredPolicy(0, strconv.Itoa(int(role.Id)))
 	for _, policy := range policies {
+		if policy[1] != casbin.Menu {
+			continue
+		}
 		menuId, _ := strconv.Atoi(policy[2])
 		role.MenuIds = append(role.MenuIds, menuId)
 	}
@@ -75,4 +78,9 @@ func EditRole(r api.EditRoleRequest) error {
 	_, err = g.Casbin().AddPolicies(policies)
 
 	return err
+}
+
+func UserRoleList() (list []api.UserRoleListResponse) {
+	g.DB().Model(model.Role{}).Find(&list)
+	return
 }

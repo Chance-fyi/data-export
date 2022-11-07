@@ -33,3 +33,8 @@ type EditRoleRequest struct {
 	Name    string `json:"name"`
 	MenuIds []int  `json:"menu_ids"`
 }
+
+type UserRoleListResponse struct {
+	Label string `json:"label" gorm:"column:name"`
+	Value string `json:"value" gorm:"column:id"`
+}

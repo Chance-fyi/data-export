@@ -9,6 +9,7 @@ import (
 	"data-export/pkg/response"
 	"data-export/pkg/validator"
 	"github.com/gin-gonic/gin"
+	"strconv"
 )
 
 func Login(ctx *gin.Context) {
@@ -68,6 +69,6 @@ func GetUserInfo(ctx *gin.Context) {
 	response.Success(ctx, "", api.GetUserInfoResponse{
 		Id:       user.Id,
 		Username: user.Username,
-		Menu:     service.UsesMenuList(ctx, nil, 0),
+		Menu:     service.UsesMenuList(nil, 0, strconv.Itoa(int(user.Id))),
 	})
 }

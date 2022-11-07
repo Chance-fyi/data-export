@@ -3,8 +3,9 @@ package service
 import (
 	"data-export/app/api"
 	"data-export/app/model"
+	"data-export/pkg/casbin"
 	"data-export/pkg/g"
-	"github.com/gin-gonic/gin"
+	"strconv"
 )
 
 func CreateMenu(r api.CreateMenuRequest) error {
@@ -69,9 +70,22 @@ func MenuSelectTree(menus []model.Menu, parentId uint) (tree []api.MenuSelectTre
 	return
 }
 
-func UsesMenuList(ctx *gin.Context, menus []model.Menu, parentId uint) (tree []api.UsesMenuList) {
+func UsesMenuList(menus []model.Menu, parentId uint, userId string) (tree []api.UsesMenuList) {
 	if menus == nil {
-		g.DB().Find(&menus)
+		var menuIds []int
+		user, err := g.Casbin().GetRolesForUser(userId)
+		if err != nil {
+			return nil
+		}
+		for _, u := range user {
+			policy := g.Casbin().GetFilteredPolicy(0, u, casbin.Menu)
+			for _, p := range policy {
+				menuId, _ := strconv.Atoi(p[2])
+				menuIds = append(menuIds, menuId)
+			}
+		}
+
+		g.DB().Where("id in ?", menuIds).Find(&menus)
 	}
 
 	for _, menu := range menus {
@@ -80,7 +94,7 @@ func UsesMenuList(ctx *gin.Context, menus []model.Menu, parentId uint) (tree []a
 				Name:   menu.Name,
 				Path:   menu.Path,
 				Icon:   menu.Icon,
-				Routes: UsesMenuList(ctx, menus, menu.Id),
+				Routes: UsesMenuList(menus, menu.Id, userId),
 			})
 		}
 	}
