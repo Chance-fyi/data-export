@@ -1,7 +1,7 @@
 package api
 
 type CreateRoleRequest struct {
-	Name    string `json:"name"`
+	Name    string `json:"name" name:"名称" validate:"required"`
 	MenuIds []int  `json:"menu_ids"`
 }
 
@@ -29,9 +29,8 @@ type GetRoleResponse struct {
 }
 
 type EditRoleRequest struct {
-	Id      uint   `json:"id"`
-	Name    string `json:"name"`
-	MenuIds []int  `json:"menu_ids"`
+	Id uint `json:"id"`
+	CreateRoleRequest
 }
 
 type UserRoleListResponse struct {

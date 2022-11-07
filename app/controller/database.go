@@ -8,15 +8,15 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func CreateRole(ctx *gin.Context) {
-	var r api.CreateRoleRequest
+func CreateDatabase(ctx *gin.Context) {
+	var r api.CreateDatabaseRequest
 	err := ctx.ShouldBind(&r)
 	if err != nil {
 		response.Error(ctx, "", validator.ProcessErr(r, err))
 		return
 	}
 
-	err = service.CreateRole(r)
+	err = service.CreateDatabase(r)
 	if err != nil {
 		response.Error(ctx, err.Error())
 		return
@@ -25,46 +25,42 @@ func CreateRole(ctx *gin.Context) {
 	response.Success(ctx, "创建成功")
 }
 
-func RoleList(ctx *gin.Context) {
-	var r api.RoleListRequest
+func DatabaseList(ctx *gin.Context) {
+	var r api.DatabaseListRequest
 	_ = ctx.ShouldBind(&r)
 
-	roles, count := service.RoleList(r)
+	databases, count := service.DatabaseList(r)
 
-	response.Success(ctx, "", api.RoleListResponse{
+	response.Success(ctx, "", api.DatabaseListResponse{
 		Total: count,
-		Data:  roles,
+		Data:  databases,
 	})
 }
 
-func GetRole(ctx *gin.Context) {
-	var r api.GetRoleRequest
+func GetDatabase(ctx *gin.Context) {
+	var r api.GetDatabaseRequest
 	err := ctx.ShouldBind(&r)
 	if err != nil {
 		response.Error(ctx, "", validator.ProcessErr(r, err))
 		return
 	}
-	role := service.GetRole(r.Id)
-	response.Success(ctx, "", role)
+	database := service.GetDatabase(r.Id)
+	response.Success(ctx, "", database)
 }
 
-func EditRole(ctx *gin.Context) {
-	var r api.EditRoleRequest
+func EditDatabase(ctx *gin.Context) {
+	var r api.EditDatabaseRequest
 	err := ctx.ShouldBind(&r)
 	if err != nil {
 		response.Error(ctx, "", validator.ProcessErr(r, err))
 		return
 	}
-	err = service.EditRole(r)
+
+	err = service.EditDatabase(r)
 	if err != nil {
 		response.Error(ctx, err.Error())
 		return
 	}
 
 	response.Success(ctx, "修改成功")
-}
-
-func RoleSelectList(ctx *gin.Context) {
-	list := service.UserRoleList()
-	response.Success(ctx, "", list)
 }

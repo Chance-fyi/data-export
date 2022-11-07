@@ -40,7 +40,15 @@ func Init(r *gin.Engine) {
 				role.GET("list", controller.RoleList)
 				role.GET("get", controller.GetRole)
 				role.POST("edit", controller.EditRole)
-				role.GET("userRoleList", controller.UserRoleList)
+				role.GET("selectList", controller.RoleSelectList)
+			}
+
+			database := api.Group("/database")
+			{
+				database.POST("create", controller.CreateDatabase)
+				database.GET("list", controller.DatabaseList)
+				database.GET("get", controller.GetDatabase)
+				database.POST("edit", controller.EditDatabase)
 			}
 		}
 	}
