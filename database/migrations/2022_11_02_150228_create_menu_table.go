@@ -11,6 +11,7 @@ func init() {
 		Id         uint   `gorm:"primarykey"`
 		Name       string `gorm:"comment:名称;type:varchar(50)"`
 		Path       string `gorm:"comment:Path;type:varchar(50)"`
+		Icon       string `gorm:"comment:图标;type:varchar(50)"`
 		ParentId   uint   `gorm:"default:0"`
 		CreateTime time.Time
 		UpdateTime time.Time

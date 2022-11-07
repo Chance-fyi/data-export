@@ -18,6 +18,7 @@ type RefreshTokenResponse struct {
 type UsesMenuList struct {
 	Name   string         `json:"name"`
 	Path   string         `json:"path"`
+	Icon   string         `json:"icon"`
 	Routes []UsesMenuList `json:"routes"`
 }
 
