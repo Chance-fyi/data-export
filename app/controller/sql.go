@@ -64,3 +64,35 @@ func EditSql(ctx *gin.Context) {
 
 	response.Success(ctx, "修改成功")
 }
+
+func GetUserSql(ctx *gin.Context) {
+	var r api.GetUserSqlRequest
+	err := ctx.ShouldBind(&r)
+	if err != nil {
+		response.Error(ctx, "", validator.ProcessErr(r, err))
+		return
+	}
+	userIds := service.GetUserSql(r.Id)
+	data := api.GetUserSqlResponse{
+		Id:      r.Id,
+		UserIds: []string{},
+	}
+	if userIds != nil {
+		data.UserIds = userIds
+	}
+
+	response.Success(ctx, "", data)
+}
+
+func SetUserSql(ctx *gin.Context) {
+	var r api.SetUserSqlRequest
+	err := ctx.ShouldBind(&r)
+	if err != nil {
+		response.Error(ctx, "", validator.ProcessErr(r, err))
+		return
+	}
+
+	service.SetUserSql(r)
+
+	response.Success(ctx, "设置成功")
+}

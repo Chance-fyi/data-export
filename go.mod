@@ -18,6 +18,7 @@ require (
 	github.com/pingcap/tidb/parser v0.0.0-20211124132551-4a1b2e9fe5b5
 	github.com/spf13/cobra v1.3.0
 	github.com/spf13/viper v1.10.1
+	github.com/thoas/go-funk v0.9.2
 	go.uber.org/zap v1.21.0
 	golang.org/x/crypto v0.0.0-20221005025214-4161e89ecf1b
 	gopkg.in/natefinch/lumberjack.v2 v2.0.0

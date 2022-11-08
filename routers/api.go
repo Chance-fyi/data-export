@@ -23,6 +23,7 @@ func Init(r *gin.Engine) {
 				user.POST("create", controller.CreateUser)
 				user.GET("get", controller.GetUser)
 				user.POST("edit", controller.EditUser)
+				user.GET("selectList", controller.UserSelectList)
 			}
 
 			menu := api.Group("/menu")
@@ -57,6 +58,8 @@ func Init(r *gin.Engine) {
 				sql.GET("list", controller.SqlList)
 				sql.GET("get", controller.GetSql)
 				sql.POST("edit", controller.EditSql)
+				sql.GET("getUser", controller.GetUserSql)
+				sql.POST("setUser", controller.SetUserSql)
 			}
 		}
 	}

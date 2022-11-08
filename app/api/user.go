@@ -38,3 +38,8 @@ type EditUserRequest struct {
 	ConfirmPassword string   `json:"confirm_password" name:"确认密码" validate:"required_with=Password,eqfield=Password" message:"required_with:请确认密码,eqfield:两次密码输入不一致"`
 	RoleIds         []string `json:"role_ids"`
 }
+
+type UserSelectListResponse struct {
+	Label string `json:"label" gorm:"column:username"`
+	Value string `json:"value" gorm:"column:id"`
+}

@@ -30,3 +30,16 @@ type EditSqlRequest struct {
 	Id uint `json:"id" validate:"required"`
 	CreateSqlRequest
 }
+
+type GetUserSqlRequest struct {
+	Id int `form:"id"`
+}
+type GetUserSqlResponse struct {
+	Id      int      `json:"id"`
+	UserIds []string `json:"user_ids"`
+}
+
+type SetUserSqlRequest struct {
+	Id      int      `json:"id"`
+	UserIds []string `json:"user_ids"`
+}

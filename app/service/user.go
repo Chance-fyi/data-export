@@ -99,3 +99,8 @@ func EditUser(r api.EditUserRequest) error {
 
 	return err
 }
+
+func UserSelectList() (list []api.UserSelectListResponse) {
+	g.DB().Model(model.User{}).Find(&list)
+	return
+}

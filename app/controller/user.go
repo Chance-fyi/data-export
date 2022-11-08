@@ -63,3 +63,8 @@ func EditUser(ctx *gin.Context) {
 
 	response.Success(ctx, "修改成功")
 }
+
+func UserSelectList(ctx *gin.Context) {
+	list := service.UserSelectList()
+	response.Success(ctx, "", list)
+}

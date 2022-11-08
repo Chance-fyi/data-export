@@ -5,6 +5,8 @@ import (
 	"data-export/app/model"
 	"data-export/pkg/g"
 	"data-export/pkg/sqlparse"
+	"github.com/thoas/go-funk"
+	"strconv"
 )
 
 func CreateSql(r api.CreateSqlRequest) error {
@@ -52,4 +54,44 @@ func EditSql(r api.EditSqlRequest) error {
 	err = g.DB().Model(&sql).Updates(sql).Error
 
 	return err
+}
+
+func GetUserSql(id int) (userIds []string) {
+	var userSql []model.UserSql
+	g.DB().Where("sql_id = ?", id).Find(&userSql)
+	for _, u := range userSql {
+		userIds = append(userIds, strconv.Itoa(int(u.UserId)))
+	}
+	return
+}
+
+func SetUserSql(r api.SetUserSqlRequest) error {
+	userIds := GetUserSql(r.Id)
+	delIds, insIds := funk.DifferenceString(userIds, r.UserIds)
+	tx := g.DB().Begin()
+	err := tx.Where("sql_id = ? and user_id in ?", r.Id, delIds).Delete(&model.UserSql{}).Error
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+	var userSql []model.UserSql
+	for _, id := range insIds {
+		userId, err := strconv.Atoi(id)
+		if err != nil {
+			tx.Rollback()
+			return err
+		}
+		userSql = append(userSql, model.UserSql{
+			UserId: uint(userId),
+			SqlId:  uint(r.Id),
+		})
+	}
+	err = tx.Create(&userSql).Error
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	tx.Commit()
+	return nil
 }
