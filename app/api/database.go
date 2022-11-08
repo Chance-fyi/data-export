@@ -38,5 +38,5 @@ type GetDatabaseResponse struct {
 
 type EditDatabaseRequest struct {
 	Id uint `json:"id" validate:"required"`
-	GetDatabaseResponse
+	CreateDatabaseRequest
 }

@@ -50,6 +50,14 @@ func Init(r *gin.Engine) {
 				database.GET("get", controller.GetDatabase)
 				database.POST("edit", controller.EditDatabase)
 			}
+
+			sql := api.Group("/sql")
+			{
+				sql.POST("create", controller.CreateSql)
+				sql.GET("list", controller.SqlList)
+				sql.GET("get", controller.GetSql)
+				sql.POST("edit", controller.EditSql)
+			}
 		}
 	}
 }

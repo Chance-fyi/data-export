@@ -28,7 +28,7 @@ type GetUserRequest struct {
 type GetUserResponse struct {
 	Id       uint     `json:"id"`
 	Username string   `json:"username"`
-	RoleIds  []string `json:"role_ids"`
+	RoleIds  []string `json:"role_ids" gorm:"-"`
 }
 
 type EditUserRequest struct {

@@ -21,14 +21,14 @@ func CreateMenu(r api.CreateMenuRequest) error {
 }
 
 func EditMenu(r api.EditMenuRequest) error {
-	menu := model.Menu{
-		Id:       r.Id,
-		Name:     r.Name,
-		Path:     r.Path,
-		Icon:     r.Icon,
-		ParentId: r.ParentId,
-	}
-	err := g.DB().Model(&menu).Updates(menu).Error
+	var menu model.Menu
+	g.DB().First(&menu, r.Id)
+	menu.Id = r.Id
+	menu.Name = r.Name
+	menu.Path = r.Path
+	menu.Icon = r.Icon
+	menu.ParentId = r.ParentId
+	err := g.DB().Save(&menu).Error
 
 	return err
 }

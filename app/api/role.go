@@ -25,7 +25,7 @@ type GetRoleRequest struct {
 type GetRoleResponse struct {
 	Id      uint   `json:"id"`
 	Name    string `json:"name"`
-	MenuIds []int  `json:"menu_ids"`
+	MenuIds []int  `json:"menu_ids" gorm:"-"`
 }
 
 type EditRoleRequest struct {
