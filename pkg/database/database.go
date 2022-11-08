@@ -55,7 +55,8 @@ func (db *db) Connect(name ...string) *gorm.DB {
 func (db *db) CreateConnection(name string, dialector gorm.Dialector, cfg connection) {
 	open, err := gorm.Open(dialector, &gorm.Config{
 		NamingStrategy: schema.NamingStrategy{
-			TablePrefix: cfg.Prefix,
+			TablePrefix:   cfg.Prefix,
+			SingularTable: true,
 		},
 	})
 	console.ExitIf(err)

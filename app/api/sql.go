@@ -32,7 +32,7 @@ type EditSqlRequest struct {
 }
 
 type GetUserSqlRequest struct {
-	Id int `form:"id"`
+	Id int `form:"id" validate:"required"`
 }
 type GetUserSqlResponse struct {
 	Id      int      `json:"id"`
@@ -42,4 +42,34 @@ type GetUserSqlResponse struct {
 type SetUserSqlRequest struct {
 	Id      int      `json:"id"`
 	UserIds []string `json:"user_ids"`
+}
+
+type MySqlListRequest struct {
+	Current  int    `form:"current"`
+	PageSize int    `form:"pageSize"`
+	Name     string `form:"name"`
+	Fields   string `form:"fields"`
+}
+type MySqlListItem struct {
+	Id     uint   `json:"id"`
+	Name   string `json:"name"`
+	Fields string `json:"fields"`
+	SqlId  uint   `json:"sql_id"`
+}
+type MySqlListResponse struct {
+	Total int64           `json:"total"`
+	Data  []MySqlListItem `json:"data"`
+}
+
+type GetUserSqlNameRequest struct {
+	Id int `form:"id" validate:"required"`
+}
+type GetUserSqlNameResponse struct {
+	Id   uint   `json:"id"`
+	Name string `json:"name"`
+}
+
+type SetUserSqlNameRequest struct {
+	Id   uint   `json:"id" validate:"required"`
+	Name string `json:"name" name:"备注" validate:"required"`
 }

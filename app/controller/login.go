@@ -2,8 +2,8 @@ package controller
 
 import (
 	"data-export/app/api"
-	"data-export/app/model"
 	"data-export/app/service"
+	"data-export/pkg/app"
 	"data-export/pkg/g"
 	"data-export/pkg/jwt"
 	"data-export/pkg/response"
@@ -64,8 +64,7 @@ func Logout(ctx *gin.Context) {
 }
 
 func GetUserInfo(ctx *gin.Context) {
-	value, _ := ctx.Get("jwtUser")
-	user := value.(model.User)
+	user := app.JwtUser(ctx)
 	response.Success(ctx, "", api.GetUserInfoResponse{
 		Id:       user.Id,
 		Username: user.Username,

@@ -60,6 +60,9 @@ func Init(r *gin.Engine) {
 				sql.POST("edit", controller.EditSql)
 				sql.GET("getUser", controller.GetUserSql)
 				sql.POST("setUser", controller.SetUserSql)
+				sql.GET("myList", controller.MySqlList)
+				sql.GET("getUserSqlName", controller.GetUserSqlName)
+				sql.POST("setUserSqlName", controller.SetUserSqlName)
 			}
 		}
 	}

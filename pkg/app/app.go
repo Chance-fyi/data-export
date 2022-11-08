@@ -1,8 +1,10 @@
 package app
 
 import (
+	"data-export/app/model"
 	"data-export/pkg/config"
 	"data-export/pkg/console"
+	"github.com/gin-gonic/gin"
 	"time"
 )
 
@@ -19,4 +21,10 @@ func IsDebug() bool {
 
 func Name() string {
 	return config.GetString("app.name")
+}
+
+func JwtUser(ctx *gin.Context) (user model.User) {
+	value, _ := ctx.Get("jwtUser")
+	user = value.(model.User)
+	return
 }

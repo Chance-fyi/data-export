@@ -5,6 +5,7 @@ import (
 	"data-export/app/model"
 	"data-export/pkg/g"
 	"data-export/pkg/sqlparse"
+	"fmt"
 	"github.com/thoas/go-funk"
 	"strconv"
 )
@@ -86,12 +87,54 @@ func SetUserSql(r api.SetUserSqlRequest) error {
 			SqlId:  uint(r.Id),
 		})
 	}
-	err = tx.Create(&userSql).Error
-	if err != nil {
-		tx.Rollback()
-		return err
+	if len(userSql) > 0 {
+		err = tx.Create(&userSql).Error
+		if err != nil {
+			tx.Rollback()
+			return err
+		}
 	}
 
 	tx.Commit()
 	return nil
+}
+
+func MySqlList(r api.MySqlListRequest, user model.User) (list []api.MySqlListItem, count int64) {
+	var (
+		us model.UserSql
+		s  model.Sql
+	)
+	Db := g.DB().Debug().Table(fmt.Sprintf("%v us", us.TableName())).
+		Joins(fmt.Sprintf("left join %v s on s.ID = us.sql_id", s.TableName()))
+
+	if r.Name != "" {
+		Db.Where("us.name like ?", "%"+r.Name+"%")
+	}
+
+	if r.Fields != "" {
+		Db.Where("s.fields like ?", "%"+r.Fields+"%")
+	}
+
+	Db.Where("us.user_id = ?", user.Id)
+	Db.Order("us.id DESC")
+	Db.Count(&count)
+	Db.Offset((r.Current-1)*r.PageSize).Limit(r.PageSize).
+		Select("us.id", "us.name", "s.fields", "us.sql_id").
+		Scan(&list)
+
+	return
+}
+
+func GetUserSqlName(id int) (userSql api.GetUserSqlNameResponse) {
+	g.DB().Model(&model.UserSql{}).First(&userSql, id)
+	return
+}
+
+func SetUserSqlName(r api.SetUserSqlNameRequest) error {
+	us := model.UserSql{
+		Id:   r.Id,
+		Name: r.Name,
+	}
+	err := g.DB().Model(&us).Updates(us).Error
+	return err
 }

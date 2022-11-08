@@ -3,6 +3,7 @@ package controller
 import (
 	"data-export/app/api"
 	"data-export/app/service"
+	"data-export/pkg/app"
 	"data-export/pkg/response"
 	"data-export/pkg/validator"
 	"github.com/gin-gonic/gin"
@@ -92,7 +93,51 @@ func SetUserSql(ctx *gin.Context) {
 		return
 	}
 
-	service.SetUserSql(r)
+	err = service.SetUserSql(r)
+	if err != nil {
+		response.Error(ctx, err.Error())
+		return
+	}
 
 	response.Success(ctx, "设置成功")
+}
+
+func MySqlList(ctx *gin.Context) {
+	var r api.MySqlListRequest
+	_ = ctx.ShouldBind(&r)
+
+	user := app.JwtUser(ctx)
+	list, count := service.MySqlList(r, user)
+
+	response.Success(ctx, "", api.MySqlListResponse{
+		Total: count,
+		Data:  list,
+	})
+}
+
+func GetUserSqlName(ctx *gin.Context) {
+	var r api.GetUserSqlNameRequest
+	err := ctx.ShouldBind(&r)
+	if err != nil {
+		response.Error(ctx, "", validator.ProcessErr(r, err))
+		return
+	}
+	data := service.GetUserSqlName(r.Id)
+	response.Success(ctx, "", data)
+}
+
+func SetUserSqlName(ctx *gin.Context) {
+	var r api.SetUserSqlNameRequest
+	err := ctx.ShouldBind(&r)
+	if err != nil {
+		response.Error(ctx, "", validator.ProcessErr(r, err))
+		return
+	}
+	err = service.SetUserSqlName(r)
+	if err != nil {
+		response.Error(ctx, err.Error())
+		return
+	}
+
+	response.Success(ctx, "修改成功")
 }

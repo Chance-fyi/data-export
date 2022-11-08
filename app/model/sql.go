@@ -9,3 +9,7 @@ type Sql struct {
 	CreateTime time.Time `gorm:"autoCreateTime"`
 	UpdateTime time.Time `gorm:"autoUpdateTime"`
 }
+
+func (Sql) TableName() string {
+	return prefix + "sql"
+}

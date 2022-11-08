@@ -1,6 +1,9 @@
 package cmd
 
 import (
+	"data-export/app/model"
+	"data-export/pkg/console"
+	"fmt"
 	"github.com/spf13/cobra"
 )
 
@@ -18,4 +21,5 @@ func testCommand() *cobra.Command {
 
 func runTest() {
 	//测试代码调试
+	console.Logln(fmt.Sprintf("%v", model.UserSql{}))
 }
