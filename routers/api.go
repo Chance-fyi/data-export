@@ -50,6 +50,7 @@ func Init(r *gin.Engine) {
 				database.GET("list", controller.DatabaseList)
 				database.GET("get", controller.GetDatabase)
 				database.POST("edit", controller.EditDatabase)
+				database.GET("selectList", controller.DatabaseSelectList)
 			}
 
 			sql := api.Group("/sql")

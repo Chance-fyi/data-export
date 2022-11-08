@@ -40,3 +40,7 @@ type EditDatabaseRequest struct {
 	Id uint `json:"id" validate:"required"`
 	CreateDatabaseRequest
 }
+type DatabaseSelectListResponse struct {
+	Label string `json:"label" gorm:"column:name"`
+	Value string `json:"value" gorm:"column:id"`
+}

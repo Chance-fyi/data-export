@@ -15,24 +15,41 @@ func CreateSql(r api.CreateSqlRequest) error {
 	if err != nil {
 		return err
 	}
+	databaseId, err := strconv.Atoi(r.DatabaseId)
+	if err != nil {
+		return err
+	}
 	sql := model.Sql{
-		Sql:    r.Sql,
-		Fields: fields,
+		Sql:        r.Sql,
+		Fields:     fields,
+		DatabaseId: uint(databaseId),
 	}
 	err = g.DB().Create(&sql).Error
 	return err
 }
 
 func SqlList(r api.SqlListRequest) (sqls []api.SqlListItem, count int64) {
-	Db := g.DB().Model(&model.Sql{})
+	var (
+		s model.Sql
+		d model.Database
+	)
+
+	Db := g.DB().Table(fmt.Sprintf("%v s", s.TableName())).
+		Joins(fmt.Sprintf("left join %v d on d.id = s.database_id", d.TableName()))
 
 	if r.Fields != "" {
-		Db.Where("fields like?", "%"+r.Fields+"%")
+		Db.Where("s.fields like ?", "%"+r.Fields+"%")
 	}
 
-	Db.Order("id DESC")
+	if r.DatabaseId != "" {
+		Db.Where("s.database_id = ?", r.DatabaseId)
+	}
+
+	Db.Order("s.id DESC")
 	Db.Count(&count)
-	Db.Offset((r.Current - 1) * r.PageSize).Limit(r.PageSize).Find(&sqls)
+	Db.Offset((r.Current-1)*r.PageSize).Limit(r.PageSize).
+		Select("s.id", "s.fields", "d.name").
+		Scan(&sqls)
 
 	return
 }
@@ -47,10 +64,15 @@ func EditSql(r api.EditSqlRequest) error {
 	if err != nil {
 		return err
 	}
+	databaseId, err := strconv.Atoi(r.DatabaseId)
+	if err != nil {
+		return err
+	}
 	sql := model.Sql{
-		Id:     r.Id,
-		Sql:    r.Sql,
-		Fields: fields,
+		Id:         r.Id,
+		Sql:        r.Sql,
+		Fields:     fields,
+		DatabaseId: uint(databaseId),
 	}
 	err = g.DB().Model(&sql).Updates(sql).Error
 
@@ -103,9 +125,11 @@ func MySqlList(r api.MySqlListRequest, user model.User) (list []api.MySqlListIte
 	var (
 		us model.UserSql
 		s  model.Sql
+		d  model.Database
 	)
-	Db := g.DB().Debug().Table(fmt.Sprintf("%v us", us.TableName())).
-		Joins(fmt.Sprintf("left join %v s on s.ID = us.sql_id", s.TableName()))
+	Db := g.DB().Table(fmt.Sprintf("%v us", us.TableName())).
+		Joins(fmt.Sprintf("left join %v s on s.ID = us.sql_id", s.TableName())).
+		Joins(fmt.Sprintf("left join %v d on d.ID = s.database_id", d.TableName()))
 
 	if r.Name != "" {
 		Db.Where("us.name like ?", "%"+r.Name+"%")
@@ -115,11 +139,15 @@ func MySqlList(r api.MySqlListRequest, user model.User) (list []api.MySqlListIte
 		Db.Where("s.fields like ?", "%"+r.Fields+"%")
 	}
 
+	if r.DatabaseId != "" {
+		Db.Where("s.database_id = ?", r.DatabaseId)
+	}
+
 	Db.Where("us.user_id = ?", user.Id)
 	Db.Order("us.id DESC")
 	Db.Count(&count)
 	Db.Offset((r.Current-1)*r.PageSize).Limit(r.PageSize).
-		Select("us.id", "us.name", "s.fields", "us.sql_id").
+		Select("us.id", "us.name", "s.fields", "us.sql_id", "d.name database_name").
 		Scan(&list)
 
 	return

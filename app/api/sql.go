@@ -1,17 +1,20 @@
 package api
 
 type CreateSqlRequest struct {
-	Sql string `json:"sql" name:"SQL" validate:"required"`
+	DatabaseId string `json:"database_id" name:"数据库" validate:"required"`
+	Sql        string `json:"sql" name:"SQL" validate:"required"`
 }
 
 type SqlListRequest struct {
-	Current  int    `form:"current"`
-	PageSize int    `form:"pageSize"`
-	Fields   string `form:"fields"`
+	Current    int    `form:"current"`
+	PageSize   int    `form:"pageSize"`
+	Fields     string `form:"fields"`
+	DatabaseId string `form:"database_id"`
 }
 type SqlListItem struct {
 	Id     uint   `json:"id"`
 	Fields string `json:"fields"`
+	Name   string `json:"name"`
 }
 type SqlListResponse struct {
 	Total int64         `json:"total"`
@@ -22,8 +25,9 @@ type GetSqlRequest struct {
 	Id int `form:"id"`
 }
 type GetSqlResponse struct {
-	Id  int    `json:"id"`
-	Sql string `json:"sql"`
+	Id         uint   `json:"id"`
+	Sql        string `json:"sql"`
+	DatabaseId string `json:"database_id"`
 }
 
 type EditSqlRequest struct {
@@ -45,16 +49,18 @@ type SetUserSqlRequest struct {
 }
 
 type MySqlListRequest struct {
-	Current  int    `form:"current"`
-	PageSize int    `form:"pageSize"`
-	Name     string `form:"name"`
-	Fields   string `form:"fields"`
+	Current    int    `form:"current"`
+	PageSize   int    `form:"pageSize"`
+	Name       string `form:"name"`
+	Fields     string `form:"fields"`
+	DatabaseId string `form:"database_id"`
 }
 type MySqlListItem struct {
-	Id     uint   `json:"id"`
-	Name   string `json:"name"`
-	Fields string `json:"fields"`
-	SqlId  uint   `json:"sql_id"`
+	Id           uint   `json:"id"`
+	Name         string `json:"name"`
+	Fields       string `json:"fields"`
+	SqlId        uint   `json:"sql_id"`
+	DatabaseName string `json:"database_name"`
 }
 type MySqlListResponse struct {
 	Total int64           `json:"total"`

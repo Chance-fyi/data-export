@@ -64,3 +64,8 @@ func EditDatabase(ctx *gin.Context) {
 
 	response.Success(ctx, "修改成功")
 }
+
+func DatabaseSelectList(ctx *gin.Context) {
+	list := service.DatabaseSelectList()
+	response.Success(ctx, "", list)
+}

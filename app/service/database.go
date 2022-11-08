@@ -52,3 +52,8 @@ func EditDatabase(r api.EditDatabaseRequest) error {
 
 	return err
 }
+
+func DatabaseSelectList() (list []api.DatabaseSelectListResponse) {
+	g.DB().Model(&model.Database{}).Find(&list)
+	return
+}

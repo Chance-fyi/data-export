@@ -13,3 +13,7 @@ type Database struct {
 	CreateTime time.Time `gorm:"autoCreateTime"`
 	UpdateTime time.Time `gorm:"autoUpdateTime"`
 }
+
+func (Database) TableName() string {
+	return prefix + "database"
+}
