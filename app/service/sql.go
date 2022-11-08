@@ -4,18 +4,28 @@ import (
 	"data-export/app/api"
 	"data-export/app/model"
 	"data-export/pkg/g"
+	"data-export/pkg/sqlparse"
 )
 
 func CreateSql(r api.CreateSqlRequest) error {
-	sql := model.Sql{
-		Sql: r.Sql,
+	fields, err := sqlparse.GetColAsName(r.Sql)
+	if err != nil {
+		return err
 	}
-	err := g.DB().Create(&sql).Error
+	sql := model.Sql{
+		Sql:    r.Sql,
+		Fields: fields,
+	}
+	err = g.DB().Create(&sql).Error
 	return err
 }
 
 func SqlList(r api.SqlListRequest) (sqls []api.SqlListItem, count int64) {
 	Db := g.DB().Model(&model.Sql{})
+
+	if r.Fields != "" {
+		Db.Where("fields like?", "%"+r.Fields+"%")
+	}
 
 	Db.Order("id DESC")
 	Db.Count(&count)
@@ -30,11 +40,16 @@ func GetSql(id int) (sql api.GetSqlResponse) {
 }
 
 func EditSql(r api.EditSqlRequest) error {
-	sql := model.Sql{
-		Id:  r.Id,
-		Sql: r.Sql,
+	fields, err := sqlparse.GetColAsName(r.Sql)
+	if err != nil {
+		return err
 	}
-	err := g.DB().Model(&sql).Updates(sql).Error
+	sql := model.Sql{
+		Id:     r.Id,
+		Sql:    r.Sql,
+		Fields: fields,
+	}
+	err = g.DB().Model(&sql).Updates(sql).Error
 
 	return err
 }

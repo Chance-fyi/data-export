@@ -2,6 +2,7 @@ package boot
 
 import (
 	"data-export/pkg/config"
+	"data-export/pkg/sqlparse"
 	"math/rand"
 	"time"
 )
@@ -17,4 +18,5 @@ func Init() {
 
 	initJwt()
 	initCasbin()
+	sqlparse.New()
 }

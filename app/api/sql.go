@@ -5,8 +5,9 @@ type CreateSqlRequest struct {
 }
 
 type SqlListRequest struct {
-	Current  int `form:"current"`
-	PageSize int `form:"pageSize"`
+	Current  int    `form:"current"`
+	PageSize int    `form:"pageSize"`
+	Fields   string `form:"fields"`
 }
 type SqlListItem struct {
 	Id     uint   `json:"id"`
