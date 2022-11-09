@@ -87,7 +87,7 @@ func exportDownloadExcel() {
 	g.DB().Model(&e).Updates(e)
 }
 
-func ExportList(r api.ExportListRequest) (export []api.ExportListItem, count int64) {
+func ExportList(r api.ExportListRequest, userId uint) (export []api.ExportListItem, count int64) {
 	Db := g.DB().Model(&model.Export{})
 
 	if r.Filename != "" {
@@ -98,6 +98,7 @@ func ExportList(r api.ExportListRequest) (export []api.ExportListItem, count int
 		Db.Where("status = ?", r.Status)
 	}
 
+	Db.Where("user_id = ?", userId)
 	Db.Order("id DESC")
 	Db.Count(&count)
 	Db.Offset((r.Current - 1) * r.PageSize).Limit(r.PageSize).Find(&export)

@@ -33,7 +33,7 @@ func ExportList(ctx *gin.Context) {
 	var r api.ExportListRequest
 	_ = ctx.ShouldBind(&r)
 
-	list, count := service.ExportList(r)
+	list, count := service.ExportList(r, app.JwtUser(ctx).Id)
 	response.Success(ctx, "", api.ExportListResponse{
 		Total: count,
 		Data:  list,
