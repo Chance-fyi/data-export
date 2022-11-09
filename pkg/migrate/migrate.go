@@ -103,6 +103,7 @@ func (mf *MigrationFile) isNotMigrated(migrations []Migration) bool {
 // up method for migration
 func (mf *MigrationFile) runUpMigration(db *gorm.DB, batch int) error {
 	if mf.Up != nil {
+		db = db.Set("gorm:table_options", "ENGINE=InnoDB")
 		console.Logln("migrating " + mf.FileName)
 		if err := mf.Up(db); err != nil {
 			return err
