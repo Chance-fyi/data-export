@@ -3,11 +3,14 @@ package service
 import (
 	"data-export/app/api"
 	"data-export/app/model"
+	"data-export/pkg/console"
 	"data-export/pkg/g"
 	"data-export/pkg/sqlparse"
 	"fmt"
 	"github.com/thoas/go-funk"
+	"regexp"
 	"strconv"
+	"strings"
 )
 
 func CreateSql(r api.CreateSqlRequest) error {
@@ -165,4 +168,50 @@ func SetUserSqlName(r api.SetUserSqlNameRequest) error {
 	}
 	err := g.DB().Model(&us).Updates(us).Error
 	return err
+}
+
+func GetDownloadSql(id int) api.GetDownloadSqlResponse {
+	var sql model.Sql
+	g.DB().First(&sql, id)
+
+	r, _ := regexp.Compile("\\{[^\\}]+\\}")
+	fields := r.FindAllString(sql.Sql, -1)
+	fields = funk.UniqString(fields)
+	res := api.GetDownloadSqlResponse{
+		Id:  sql.Id,
+		Sql: sql.Sql,
+	}
+	for _, field := range fields {
+		field = strings.Trim(strings.Trim(field, "{"), "}")
+		f := strings.ToLower(field)
+		console.Logln(f)
+		switch {
+		case strings.Contains(f, "datetime"):
+			res.Fields = append(res.Fields, api.GetDownloadSqlField{
+				Name: field,
+				Type: "datetime",
+			})
+		case strings.Contains(f, "date"):
+			res.Fields = append(res.Fields, api.GetDownloadSqlField{
+				Name: field,
+				Type: "date",
+			})
+		case strings.Contains(f, "time"):
+			res.Fields = append(res.Fields, api.GetDownloadSqlField{
+				Name: field,
+				Type: "time",
+			})
+		case strings.Contains(f, "text"):
+			res.Fields = append(res.Fields, api.GetDownloadSqlField{
+				Name: field,
+				Type: "text",
+			})
+		default:
+			res.Fields = append(res.Fields, api.GetDownloadSqlField{
+				Name: field,
+				Type: "text",
+			})
+		}
+	}
+	return res
 }

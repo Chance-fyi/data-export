@@ -141,3 +141,14 @@ func SetUserSqlName(ctx *gin.Context) {
 
 	response.Success(ctx, "修改成功")
 }
+
+func GetDownloadSql(ctx *gin.Context) {
+	var r api.GetDownloadSqlRequest
+	err := ctx.ShouldBind(&r)
+	if err != nil {
+		response.Error(ctx, "", validator.ProcessErr(r, err))
+		return
+	}
+	data := service.GetDownloadSql(r.Id)
+	response.Success(ctx, "", data)
+}

@@ -79,3 +79,16 @@ type SetUserSqlNameRequest struct {
 	Id   uint   `json:"id" validate:"required"`
 	Name string `json:"name" name:"备注" validate:"required"`
 }
+
+type GetDownloadSqlRequest struct {
+	Id int `form:"id" validate:"required"`
+}
+type GetDownloadSqlField struct {
+	Name string `json:"name"`
+	Type string `json:"type"`
+}
+type GetDownloadSqlResponse struct {
+	Id     uint                  `json:"id"`
+	Sql    string                `json:"sql"`
+	Fields []GetDownloadSqlField `json:"fields"`
+}
