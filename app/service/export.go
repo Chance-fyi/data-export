@@ -86,3 +86,27 @@ func exportDownloadExcel() {
 	e.Path = name
 	g.DB().Model(&e).Updates(e)
 }
+
+func ExportList(r api.ExportListRequest) (export []api.ExportListItem, count int64) {
+	Db := g.DB().Model(&model.Export{})
+
+	if r.Filename != "" {
+		Db.Where("filename like ?", "%"+r.Filename+"%")
+	}
+
+	if r.Status != "" {
+		Db.Where("status = ?", r.Status)
+	}
+
+	Db.Order("id DESC")
+	Db.Count(&count)
+	Db.Offset((r.Current - 1) * r.PageSize).Limit(r.PageSize).Find(&export)
+	return
+}
+
+func ExportDownload(r api.ExportDownloadRequest) (e model.Export) {
+	_ = g.DB().First(&e, r.Id)
+	e.Status = 2
+	g.DB().Model(&e).Updates(e)
+	return
+}

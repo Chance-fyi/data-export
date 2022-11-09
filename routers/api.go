@@ -12,6 +12,8 @@ func Init(r *gin.Engine) {
 		api.POST("/login", controller.Login)
 		api.POST("/refreshToken", controller.RefreshToken)
 
+		api.GET("/export/download", controller.ExportDownload)
+
 		api.Use(middlewares.AuthJWT())
 		{
 			api.GET("/logout", controller.Logout)
@@ -70,6 +72,7 @@ func Init(r *gin.Engine) {
 			export := api.Group("/export")
 			{
 				export.POST("create", controller.CreateExport)
+				export.GET("list", controller.ExportList)
 			}
 		}
 	}

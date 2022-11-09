@@ -3,7 +3,6 @@ package service
 import (
 	"data-export/app/api"
 	"data-export/app/model"
-	"data-export/pkg/console"
 	"data-export/pkg/g"
 	"data-export/pkg/sqlparse"
 	"fmt"
@@ -184,7 +183,6 @@ func GetDownloadSql(id int) api.GetDownloadSqlResponse {
 	for _, field := range fields {
 		field = strings.Trim(strings.Trim(field, "{"), "}")
 		f := strings.ToLower(field)
-		console.Logln(f)
 		switch {
 		case strings.Contains(f, "datetime"):
 			res.Fields = append(res.Fields, api.GetDownloadSqlField{
