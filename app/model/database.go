@@ -10,6 +10,7 @@ type Database struct {
 	Username   string
 	Password   string
 	Database   string
+	Charset    string
 	CreateTime time.Time `gorm:"autoCreateTime"`
 	UpdateTime time.Time `gorm:"autoUpdateTime"`
 }

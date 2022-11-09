@@ -3,7 +3,12 @@ package service
 import (
 	"data-export/app/api"
 	"data-export/app/model"
+	"data-export/pkg/database"
 	"data-export/pkg/g"
+	"fmt"
+	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
+	"gorm.io/gorm/schema"
 )
 
 func CreateDatabase(r api.CreateDatabaseRequest) error {
@@ -14,8 +19,22 @@ func CreateDatabase(r api.CreateDatabaseRequest) error {
 		Username: r.Username,
 		Password: r.Password,
 		Database: r.Database,
+		Charset:  r.Charset,
 	}
-	err := g.DB().Create(&database).Error
+	tx := g.DB().Begin()
+	err := tx.Create(&database).Error
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	_, err = linkDb(database)
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	tx.Commit()
 	return err
 }
 
@@ -47,13 +66,65 @@ func EditDatabase(r api.EditDatabaseRequest) error {
 		Username: r.Username,
 		Password: r.Password,
 		Database: r.Database,
+		Charset:  r.Charset,
 	}
-	err := g.DB().Model(&database).Updates(database).Error
 
+	tx := g.DB().Begin()
+	err := tx.Model(&database).Updates(database).Error
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	_, err = linkDb(database)
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	tx.Commit()
 	return err
 }
 
 func DatabaseSelectList() (list []api.DatabaseSelectListResponse) {
 	g.DB().Model(&model.Database{}).Find(&list)
 	return
+}
+
+func getDb(id uint) (*gorm.DB, error) {
+	name := fmt.Sprintf("connections_%v", id)
+	Db := g.DB(name)
+	if Db != nil {
+		return Db, nil
+	}
+
+	var d model.Database
+	g.DB().First(&d, id)
+	return linkDb(d)
+}
+
+func linkDb(d model.Database) (*gorm.DB, error) {
+	dsn := fmt.Sprintf("%v:%v@tcp(%v:%v)/%v?charset=%v&parseTime=True&loc=Local",
+		d.Username,
+		d.Password,
+		d.Hostname,
+		d.Port,
+		d.Database,
+		d.Charset,
+	)
+	dialector := mysql.New(mysql.Config{
+		DSN: dsn,
+	})
+	Db, err := gorm.Open(dialector, &gorm.Config{
+		NamingStrategy: schema.NamingStrategy{
+			SingularTable: true,
+		},
+	})
+	if err != nil {
+		return nil, err
+	}
+	name := fmt.Sprintf("connections_%v", d.Id)
+	database.DB.SetConnections(name, Db)
+
+	return Db, nil
 }

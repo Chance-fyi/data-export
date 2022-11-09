@@ -19,4 +19,5 @@ func Init() {
 	initJwt()
 	initCasbin()
 	sqlparse.New()
+	initConsumer()
 }

@@ -5,6 +5,7 @@ go 1.17
 require (
 	github.com/casbin/casbin/v2 v2.56.0
 	github.com/casbin/gorm-adapter/v3 v3.13.0
+	github.com/emirpasic/gods v1.18.1
 	github.com/fsnotify/fsnotify v1.5.1
 	github.com/gin-gonic/gin v1.7.7
 	github.com/go-playground/locales v0.13.0
@@ -14,11 +15,13 @@ require (
 	github.com/golang-jwt/jwt/v4 v4.4.2
 	github.com/gookit/color v1.5.1
 	github.com/iancoleman/strcase v0.2.0
+	github.com/panjf2000/ants/v2 v2.6.0
 	github.com/pingcap/tidb v1.1.0-beta.0.20211124132551-4a1b2e9fe5b5
 	github.com/pingcap/tidb/parser v0.0.0-20211124132551-4a1b2e9fe5b5
 	github.com/spf13/cobra v1.3.0
 	github.com/spf13/viper v1.10.1
 	github.com/thoas/go-funk v0.9.2
+	github.com/xuri/excelize/v2 v2.6.1
 	go.uber.org/zap v1.21.0
 	golang.org/x/crypto v0.0.0-20221005025214-4161e89ecf1b
 	gopkg.in/natefinch/lumberjack.v2 v2.0.0
@@ -70,6 +73,7 @@ require (
 	github.com/mitchellh/mapstructure v1.4.3 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
+	github.com/mohae/deepcopy v0.0.0-20170929034955-c48cc78d4826 // indirect
 	github.com/opentracing/opentracing-go v1.1.0 // indirect
 	github.com/pelletier/go-toml v1.9.4 // indirect
 	github.com/pingcap/errors v0.11.5-0.20210425183316-da1aaba5fb63 // indirect
@@ -83,6 +87,8 @@ require (
 	github.com/prometheus/common v0.9.1 // indirect
 	github.com/prometheus/procfs v0.0.8 // indirect
 	github.com/remyoudompheng/bigfft v0.0.0-20200410134404-eec4a21b6bb0 // indirect
+	github.com/richardlehane/mscfb v1.0.4 // indirect
+	github.com/richardlehane/msoleps v1.0.3 // indirect
 	github.com/shirou/gopsutil v3.21.2+incompatible // indirect
 	github.com/spf13/afero v1.6.0 // indirect
 	github.com/spf13/cast v1.4.1 // indirect
@@ -95,10 +101,12 @@ require (
 	github.com/uber/jaeger-lib v2.4.1+incompatible // indirect
 	github.com/ugorji/go/codec v1.1.7 // indirect
 	github.com/xo/terminfo v0.0.0-20210125001918-ca9a967f8778 // indirect
+	github.com/xuri/efp v0.0.0-20220603152613-6918739fd470 // indirect
+	github.com/xuri/nfp v0.0.0-20220409054826-5e722a1d9e22 // indirect
 	go.etcd.io/etcd v0.5.0-alpha.5.0.20210512015243-d19fbe541bf9 // indirect
 	go.uber.org/atomic v1.9.0 // indirect
 	go.uber.org/multierr v1.8.0 // indirect
-	golang.org/x/net v0.0.0-20220425223048-2871e0cb64e4 // indirect
+	golang.org/x/net v0.0.0-20220812174116-3211cb980234 // indirect
 	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c // indirect
 	golang.org/x/sys v0.0.0-20220811171246-fbc7d0a398ab // indirect
 	golang.org/x/text v0.3.7 // indirect

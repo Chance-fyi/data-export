@@ -66,6 +66,11 @@ func Init(r *gin.Engine) {
 				sql.POST("setUserSqlName", controller.SetUserSqlName)
 				sql.GET("getDownloadSql", controller.GetDownloadSql)
 			}
+
+			export := api.Group("/export")
+			{
+				export.POST("create", controller.CreateExport)
+			}
 		}
 	}
 }

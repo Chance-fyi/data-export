@@ -21,6 +21,7 @@ type CreateDatabaseRequest struct {
 	Username string `json:"username" name:"用户名" validate:"required"`
 	Password string `json:"password" name:"密码" validate:"required"`
 	Database string `json:"database" name:"数据库名" validate:"required"`
+	Charset  string `json:"charset" name:"字符集" validate:"required"`
 }
 
 type GetDatabaseRequest struct {
@@ -34,6 +35,7 @@ type GetDatabaseResponse struct {
 	Username string `json:"username"`
 	Password string `json:"password"`
 	Database string `json:"database"`
+	Charset  string `json:"charset"`
 }
 
 type EditDatabaseRequest struct {

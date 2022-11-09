@@ -15,6 +15,7 @@ func init() {
 		Username   string `gorm:"comment:用户名;varchar(50)"`
 		Password   string `gorm:"comment:密码;varchar(50)"`
 		Database   string `gorm:"comment:数据库名;varchar(50)"`
+		Charset    string `gorm:"comment:字符集;varchar(20)"`
 		CreateTime time.Time
 		UpdateTime time.Time
 	}
