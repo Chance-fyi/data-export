@@ -2,6 +2,7 @@ package api
 
 type CreateSqlRequest struct {
 	DatabaseId string `json:"database_id" name:"数据库" validate:"required"`
+	Name       string `json:"name" name:"备注" validate:"required"`
 	Sql        string `json:"sql" name:"SQL" validate:"required"`
 }
 
@@ -12,9 +13,10 @@ type SqlListRequest struct {
 	DatabaseId string `form:"database_id"`
 }
 type SqlListItem struct {
-	Id     uint   `json:"id"`
-	Fields string `json:"fields"`
-	Name   string `json:"name"`
+	Id           uint   `json:"id"`
+	Fields       string `json:"fields"`
+	Name         string `json:"name"`
+	DatabaseName string `json:"database_name"`
 }
 type SqlListResponse struct {
 	Total int64         `json:"total"`
@@ -27,6 +29,7 @@ type GetSqlRequest struct {
 type GetSqlResponse struct {
 	Id         uint   `json:"id"`
 	Sql        string `json:"sql"`
+	Name       string `json:"name"`
 	DatabaseId string `json:"database_id"`
 }
 
@@ -45,6 +48,7 @@ type GetUserSqlResponse struct {
 
 type SetUserSqlRequest struct {
 	Id      int      `json:"id"`
+	Name    string   `json:"name"`
 	UserIds []string `json:"user_ids"`
 }
 

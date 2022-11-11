@@ -4,6 +4,7 @@ import "time"
 
 type Sql struct {
 	Id         uint
+	Name       string
 	Sql        string
 	Fields     string
 	DatabaseId uint

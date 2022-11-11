@@ -22,6 +22,7 @@ func CreateSql(r api.CreateSqlRequest) error {
 		return err
 	}
 	sql := model.Sql{
+		Name:       r.Name,
 		Sql:        r.Sql,
 		Fields:     fields,
 		DatabaseId: uint(databaseId),
@@ -50,7 +51,7 @@ func SqlList(r api.SqlListRequest) (sqls []api.SqlListItem, count int64) {
 	Db.Order("s.id DESC")
 	Db.Count(&count)
 	Db.Offset((r.Current-1)*r.PageSize).Limit(r.PageSize).
-		Select("s.id", "s.fields", "d.name").
+		Select("s.id", "s.name", "s.fields", "d.name database_name").
 		Scan(&sqls)
 
 	return
@@ -72,6 +73,7 @@ func EditSql(r api.EditSqlRequest) error {
 	}
 	sql := model.Sql{
 		Id:         r.Id,
+		Name:       r.Name,
 		Sql:        r.Sql,
 		Fields:     fields,
 		DatabaseId: uint(databaseId),
@@ -109,6 +111,7 @@ func SetUserSql(r api.SetUserSqlRequest) error {
 		userSql = append(userSql, model.UserSql{
 			UserId: uint(userId),
 			SqlId:  uint(r.Id),
+			Name:   r.Name,
 		})
 	}
 	if len(userSql) > 0 {

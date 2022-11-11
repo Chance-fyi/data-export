@@ -3,15 +3,13 @@ package model
 import (
 	"data-export/pkg/g"
 	"strconv"
-	"time"
 )
 
 type User struct {
-	Id         uint
-	Username   string
-	Password   string
-	CreateTime time.Time `gorm:"autoCreateTime"`
-	UpdateTime time.Time `gorm:"autoUpdateTime"`
+	Id       uint
+	Username string
+	Password string
+	timeModel
 }
 
 func (u User) IsAdmin() bool {
