@@ -13,7 +13,9 @@ import (
 )
 
 func CreateSql(r api.CreateSqlRequest) error {
-	fields, err := sqlparse.GetColAsName(r.Sql)
+	reg, _ := regexp.Compile("[\\{\\}]")
+	s := reg.ReplaceAll([]byte(r.Sql), []byte(""))
+	fields, err := sqlparse.GetColAsName(string(s))
 	if err != nil {
 		return err
 	}
@@ -63,7 +65,9 @@ func GetSql(id int) (sql api.GetSqlResponse) {
 }
 
 func EditSql(r api.EditSqlRequest) error {
-	fields, err := sqlparse.GetColAsName(r.Sql)
+	reg, _ := regexp.Compile("[\\{\\}]")
+	s := reg.ReplaceAll([]byte(r.Sql), []byte(""))
+	fields, err := sqlparse.GetColAsName(string(s))
 	if err != nil {
 		return err
 	}
