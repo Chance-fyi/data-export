@@ -13,11 +13,11 @@ func init() {
 		UserSqlId  uint   `gorm:"comment:用户SQLid;type:int(11)"`
 		SqlId      uint   `gorm:"comment:SQLid;type:int(11)"`
 		DatabaseId uint   `gorm:"comment:数据库id;type:int(11)"`
-		Filename   string `gorm:"comment:文件名;varchar(50)"`
-		Sql        string `gorm:"comment:SQL;text"`
-		Path       string `gorm:"comment:地址;varchar(255)"`
-		Status     uint   `gorm:"comment:状态;tinyint(2)"`
-		ErrorMsg   string `gorm:"comment:失败原因;varchar(500)"`
+		Filename   string `gorm:"comment:文件名;type:varchar(50)"`
+		Sql        string `gorm:"comment:SQL;type:text"`
+		Path       string `gorm:"comment:地址;type:varchar(255)"`
+		Status     uint   `gorm:"comment:状态;type:tinyint(2)"`
+		ErrorMsg   string `gorm:"comment:失败原因;type:varchar(500)"`
 		CreateTime time.Time
 		UpdateTime time.Time
 	}

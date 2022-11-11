@@ -11,7 +11,7 @@ func init() {
 		Id         uint   `gorm:"primarykey"`
 		UserId     uint   `gorm:"comment:用户id;type:int(11);uniqueindex:user_sql"`
 		SqlId      uint   `gorm:"comment:SQLid;type:int(11);uniqueindex:user_sql"`
-		Name       string `gorm:"comment:名称;varchar(50)"`
+		Name       string `gorm:"comment:名称;type:varchar(50)"`
 		CreateTime time.Time
 		UpdateTime time.Time
 	}
