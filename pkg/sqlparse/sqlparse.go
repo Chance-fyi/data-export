@@ -18,7 +18,15 @@ type colX struct {
 func (v *colX) Enter(in ast.Node) (ast.Node, bool) {
 	fieldList := in.(*ast.SelectStmt).Fields.Fields
 	for _, field := range fieldList {
-		v.colAsNames = append(v.colAsNames, field.AsName.String())
+		if field.AsName.String() != "" {
+			v.colAsNames = append(v.colAsNames, field.AsName.String())
+		} else {
+			name := field.Text()
+			if strings.Contains(name, ".") {
+				name = strings.Split(name, ".")[1]
+			}
+			v.colAsNames = append(v.colAsNames, name)
+		}
 	}
 	return in, true
 }

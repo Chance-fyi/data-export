@@ -17,7 +17,7 @@ func init() {
 		Sql        string `gorm:"comment:SQL;text"`
 		Path       string `gorm:"comment:地址;varchar(255)"`
 		Status     uint   `gorm:"comment:状态;tinyint(2)"`
-		ErrorMsg   uint   `gorm:"comment:失败原因;varchar(500)"`
+		ErrorMsg   string `gorm:"comment:失败原因;varchar(500)"`
 		CreateTime time.Time
 		UpdateTime time.Time
 	}
