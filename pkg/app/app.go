@@ -7,9 +7,7 @@ import (
 	"data-export/pkg/str"
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"github.com/thoas/go-funk"
 	"github.com/xuri/excelize/v2"
-	"strings"
 	"time"
 )
 
@@ -35,9 +33,6 @@ func JwtUser(ctx *gin.Context) (user model.User) {
 }
 
 func ExportExcel(header []string, data []map[string]string) (string, error) {
-	header = funk.Map(header, func(s string) string {
-		return strings.Trim(s, " ")
-	}).([]string)
 	f := excelize.NewFile()
 	r := 1 //行
 	s := 1 //工作簿

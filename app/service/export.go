@@ -9,7 +9,6 @@ import (
 	"fmt"
 	llq "github.com/emirpasic/gods/queues/linkedlistqueue"
 	"github.com/panjf2000/ants/v2"
-	"strings"
 )
 
 var ExportQueue = llq.New()
@@ -71,11 +70,8 @@ func exportDownloadExcel() {
 		g.DB().Model(&e).Updates(e)
 		return
 	}
-	list = database.ScanRows2map(rows)
+	header, list := database.ScanRows2map(rows)
 
-	var fields string
-	_ = g.DB().Model(&model.Sql{}).Where("id = ?", e.SqlId).Select("fields").Row().Scan(&fields)
-	header := strings.Split(fields, ",")
 	name, err := app.ExportExcel(header, list)
 	if err != nil {
 		e.ErrorMsg = err.Error()

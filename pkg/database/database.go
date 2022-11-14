@@ -6,8 +6,7 @@ import (
 	"fmt"
 	"gorm.io/gorm"
 	"gorm.io/gorm/schema"
-	"reflect"
-	"unsafe"
+	"time"
 )
 
 type Config struct {
@@ -70,34 +69,32 @@ func (db *db) SetConnections(name string, Db *gorm.DB) {
 	db.connections[name] = Db
 }
 
-func ScanRows2map(rows *sql.Rows) []map[string]string {
-	res := make([]map[string]string, 0)               //  定义结果 map
-	colTypes, _ := rows.ColumnTypes()                 // 列信息
-	var rowParam = make([]interface{}, len(colTypes)) // 传入到 rows.Scan 的参数 数组
-	var rowValue = make([]interface{}, len(colTypes)) // 接收数据一行列的数组
+func ScanRows2map(rows *sql.Rows) (columns []string, list []map[string]string) {
+	columns, _ = rows.Columns()
+	columnLength := len(columns)
 
-	for i, colType := range colTypes {
-		rowValue[i] = reflect.New(colType.ScanType())           // 跟据数据库参数类型，创建默认值 和类型
-		rowParam[i] = reflect.ValueOf(&rowValue[i]).Interface() // 跟据接收的数据的类型反射出值的地址
-
+	cache := make([]interface{}, columnLength)
+	for index := range cache {
+		var a interface{}
+		cache[index] = &a
 	}
-	// 遍历
-	for rows.Next() {
-		rows.Scan(rowParam...) // 赋值到 rowValue 中
-		record := make(map[string]string)
-		for i, colType := range colTypes {
 
-			if rowValue[i] == nil {
-				record[colType.Name()] = ""
-			} else {
-				record[colType.Name()] = byte2Str(rowValue[i].([]byte))
+	for rows.Next() {
+		_ = rows.Scan(cache...)
+
+		item := make(map[string]string, columnLength)
+		for i, data := range cache {
+			v := *data.(*interface{})
+			switch v.(type) {
+			case time.Time:
+				item[columns[i]] = v.(time.Time).Format("2006-01-02 15:04:05")
+			case []uint8:
+				item[columns[i]] = string(v.([]byte))
 			}
 		}
-		res = append(res, record)
-	}
-	return res
-}
 
-func byte2Str(b []byte) string {
-	return *(*string)(unsafe.Pointer(&b))
+		list = append(list, item)
+	}
+
+	return
 }
