@@ -9,6 +9,7 @@ import (
 	"fmt"
 	llq "github.com/emirpasic/gods/queues/linkedlistqueue"
 	"github.com/panjf2000/ants/v2"
+	"time"
 )
 
 var ExportQueue = llq.New()
@@ -43,6 +44,7 @@ func ExportQueueConsumer(size int) {
 
 	for {
 		_ = pool.Submit(exportDownloadExcel)
+		time.Sleep(time.Millisecond)
 	}
 }
 
