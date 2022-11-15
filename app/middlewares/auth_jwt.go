@@ -22,6 +22,7 @@ func AuthJWT() gin.HandlerFunc {
 				response.Json(ctx, 100, err.Error())
 			}
 			ctx.Abort()
+			return
 		}
 
 		var user model.User
