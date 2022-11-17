@@ -4,7 +4,6 @@ import (
 	"data-export/app/api"
 	"data-export/app/model"
 	"data-export/pkg/app"
-	"data-export/pkg/database"
 	"data-export/pkg/g"
 	"fmt"
 	llq "github.com/emirpasic/gods/queues/linkedlistqueue"
@@ -65,16 +64,7 @@ func exportDownloadExcel() {
 		return
 	}
 
-	var list []map[string]string
-	rows, err := Db.Raw(e.Sql).Rows()
-	if err != nil {
-		e.ErrorMsg = err.Error()
-		g.DB().Model(&e).Updates(e)
-		return
-	}
-	header, list := database.ScanRows2map(rows)
-
-	name, err := app.ExportExcel(header, list)
+	name, err := app.ChunkFindExportExcel(Db.Raw(e.Sql))
 	if err != nil {
 		e.ErrorMsg = err.Error()
 		g.DB().Model(&e).Updates(e)

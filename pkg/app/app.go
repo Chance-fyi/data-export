@@ -7,7 +7,9 @@ import (
 	"data-export/pkg/str"
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"github.com/thoas/go-funk"
 	"github.com/xuri/excelize/v2"
+	"gorm.io/gorm"
 	"time"
 )
 
@@ -32,34 +34,97 @@ func JwtUser(ctx *gin.Context) (user model.User) {
 	return
 }
 
-func ExportExcel(header []string, data []map[string]string) (string, error) {
-	f := excelize.NewFile()
-	r := 1 //行
-	s := 1 //工作簿
+func ChunkFindExportExcel(Db *gorm.DB) (string, error) {
+	rows, err := Db.Rows()
+	if err != nil {
+		return "", err
+	}
+	var (
+		columns []string
+		list    []map[string]string
+		size    = 20000
+		f       = excelize.NewFile()
+		r       = 1 //行
+		s       = 1 //工作簿
+		sw, _   = f.NewStreamWriter(fmt.Sprintf("Sheet%v", s))
+	)
+
+	columns, err = rows.Columns()
+	if err != nil {
+		return "", err
+	}
+	columnLength := len(columns)
+
+	cache := make([]interface{}, columnLength)
+	for index := range cache {
+		var a interface{}
+		cache[index] = &a
+	}
+
+	for rows.Next() {
+		err = rows.Scan(cache...)
+		if err != nil {
+			return "", err
+		}
+
+		item := make(map[string]string, columnLength)
+		for i, data := range cache {
+			v := *data.(*interface{})
+			switch v.(type) {
+			case time.Time:
+				item[columns[i]] = v.(time.Time).Format("2006-01-02 15:04:05")
+			case []uint8:
+				item[columns[i]] = string(v.([]byte))
+			}
+		}
+		list = append(list, item)
+
+		if len(list) == size {
+			sw, r, s = exportExcel(columns, list, f, sw, r, s)
+			list = nil
+		}
+	}
+	if len(list) > 0 {
+		sw, r, s = exportExcel(columns, list, f, sw, r, s)
+		list = nil
+	}
+
+	_ = sw.Flush()
+	name := fmt.Sprintf("./tmp/%v.xlsx", str.RandString(32))
+	err = f.SaveAs(name)
+	_ = f.Close()
+	return name, err
+}
+
+func exportExcel(header []string, data []map[string]string, f *excelize.File, sw *excelize.StreamWriter, r int, s int) (*excelize.StreamWriter, int, int) {
+	h := funk.Map(header, func(i interface{}) interface{} {
+		return i
+	}).([]interface{})
+
 	for _, item := range data {
-		if r == 1000000 {
+		if r > 1000000 {
+			_ = sw.Flush()
 			r = 1
 			s++
-			f.NewSheet(fmt.Sprintf("Sheet%v", s))
+			sheet := fmt.Sprintf("Sheet%v", s)
+			f.NewSheet(sheet)
+			sw, _ = f.NewStreamWriter(sheet)
 		}
-		sheet := fmt.Sprintf("Sheet%v", s)
-		c := 1 //列
-		for _, h := range header {
-			if r == 1 { //标题
-				name, _ := excelize.CoordinatesToCellName(c, r)
-				_ = f.SetCellValue(sheet, name, h)
-				name, _ = excelize.CoordinatesToCellName(c, r+1)
-				_ = f.SetCellValue(sheet, name, item[h])
-				c++
-				continue
-			}
-			name, _ := excelize.CoordinatesToCellName(c, r+1)
-			_ = f.SetCellValue(sheet, name, item[h])
-			c++
+		v := funk.Map(header, func(i string) interface{} {
+			return item[i]
+		}).([]interface{})
+		if r == 1 {
+			cell, _ := excelize.CoordinatesToCellName(1, r)
+			_ = sw.SetRow(cell, h)
+			r++
+			cell, _ = excelize.CoordinatesToCellName(1, r)
+			_ = sw.SetRow(cell, v)
+			r++
+			continue
 		}
+		cell, _ := excelize.CoordinatesToCellName(1, r)
+		_ = sw.SetRow(cell, v)
 		r++
 	}
-	name := fmt.Sprintf("./tmp/%v.xlsx", str.RandString(32))
-	err := f.SaveAs(name)
-	return name, err
+	return sw, r, s
 }

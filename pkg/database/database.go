@@ -2,11 +2,9 @@ package database
 
 import (
 	"data-export/pkg/console"
-	"database/sql"
 	"fmt"
 	"gorm.io/gorm"
 	"gorm.io/gorm/schema"
-	"time"
 )
 
 type Config struct {
@@ -67,34 +65,4 @@ func (db *db) CreateConnection(name string, dialector gorm.Dialector, cfg connec
 
 func (db *db) SetConnections(name string, Db *gorm.DB) {
 	db.connections[name] = Db
-}
-
-func ScanRows2map(rows *sql.Rows) (columns []string, list []map[string]string) {
-	columns, _ = rows.Columns()
-	columnLength := len(columns)
-
-	cache := make([]interface{}, columnLength)
-	for index := range cache {
-		var a interface{}
-		cache[index] = &a
-	}
-
-	for rows.Next() {
-		_ = rows.Scan(cache...)
-
-		item := make(map[string]string, columnLength)
-		for i, data := range cache {
-			v := *data.(*interface{})
-			switch v.(type) {
-			case time.Time:
-				item[columns[i]] = v.(time.Time).Format("2006-01-02 15:04:05")
-			case []uint8:
-				item[columns[i]] = string(v.([]byte))
-			}
-		}
-
-		list = append(list, item)
-	}
-
-	return
 }
