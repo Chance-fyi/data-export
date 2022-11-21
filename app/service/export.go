@@ -5,9 +5,11 @@ import (
 	"data-export/app/model"
 	"data-export/pkg/app"
 	"data-export/pkg/g"
+	ws "data-export/pkg/websocket"
 	"fmt"
 	llq "github.com/emirpasic/gods/queues/linkedlistqueue"
 	"github.com/panjf2000/ants/v2"
+	"strconv"
 	"time"
 )
 
@@ -73,6 +75,12 @@ func exportDownloadExcel() {
 	e.Status = 1
 	e.Path = name
 	g.DB().Model(&e).Updates(e)
+	ws.SendUseTag(strconv.Itoa(int(e.UserId)), api.WsResponse{
+		Type: "export",
+		Data: api.WsExportResponse{
+			Name: e.Filename,
+		},
+	})
 }
 
 func ExportList(r api.ExportListRequest, userId uint) (export []api.ExportListItem, count int64) {

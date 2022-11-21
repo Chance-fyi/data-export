@@ -14,6 +14,7 @@ require (
 	github.com/go-redis/redis/v9 v9.0.0-beta.1
 	github.com/golang-jwt/jwt/v4 v4.4.2
 	github.com/gookit/color v1.5.1
+	github.com/gorilla/websocket v1.5.0
 	github.com/iancoleman/strcase v0.2.0
 	github.com/panjf2000/ants/v2 v2.6.0
 	github.com/pingcap/tidb v1.1.0-beta.0.20211124132551-4a1b2e9fe5b5
@@ -21,6 +22,7 @@ require (
 	github.com/spf13/cobra v1.3.0
 	github.com/spf13/viper v1.10.1
 	github.com/thoas/go-funk v0.9.2
+	github.com/tidwall/gjson v1.14.3
 	github.com/xuri/excelize/v2 v2.6.1
 	go.uber.org/zap v1.21.0
 	golang.org/x/crypto v0.0.0-20221005025214-4161e89ecf1b
@@ -95,6 +97,8 @@ require (
 	github.com/spf13/jwalterweatherman v1.1.0 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/subosito/gotenv v1.2.0 // indirect
+	github.com/tidwall/match v1.1.1 // indirect
+	github.com/tidwall/pretty v1.2.1 // indirect
 	github.com/tikv/client-go/v2 v2.0.0-alpha.0.20211029104011-2fd3841894de // indirect
 	github.com/tikv/pd v1.1.0-beta.0.20211104095303-69c86d05d379 // indirect
 	github.com/uber/jaeger-client-go v2.22.1+incompatible // indirect

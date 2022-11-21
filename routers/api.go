@@ -3,10 +3,13 @@ package routers
 import (
 	"data-export/app/controller"
 	"data-export/app/middlewares"
+	ws "data-export/pkg/websocket"
 	"github.com/gin-gonic/gin"
 )
 
 func Init(r *gin.Engine) {
+	r.GET("/ws", ws.ServeWs)
+
 	api := r.Group("/api")
 	{
 		api.POST("/login", controller.Login)

@@ -20,4 +20,5 @@ func Init() {
 	initCasbin()
 	sqlparse.New()
 	initConsumer()
+	initWebSocket()
 }
