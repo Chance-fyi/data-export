@@ -11,5 +11,5 @@ type Export struct {
 	Path       string
 	Status     uint //0 导出中  1 未下载  2 已下载  3 失败  4 删除
 	ErrorMsg   string
-	timeModel
+	TimeModel
 }

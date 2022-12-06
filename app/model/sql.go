@@ -1,15 +1,12 @@
 package model
 
-import "time"
-
 type Sql struct {
 	Id         uint
 	Name       string
 	Sql        string
 	Fields     string
 	DatabaseId uint
-	CreateTime time.Time `gorm:"autoCreateTime"`
-	UpdateTime time.Time `gorm:"autoUpdateTime"`
+	TimeModel
 }
 
 func (Sql) TableName() string {

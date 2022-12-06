@@ -9,7 +9,7 @@ type User struct {
 	Id       uint
 	Username string
 	Password string
-	timeModel
+	TimeModel
 }
 
 func (u User) IsAdmin() bool {

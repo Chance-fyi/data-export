@@ -6,5 +6,5 @@ type Menu struct {
 	Path     string
 	Icon     string
 	ParentId uint
-	timeModel
+	TimeModel
 }

@@ -4,7 +4,7 @@ import "time"
 
 const prefix = "de_"
 
-type timeModel struct {
+type TimeModel struct {
 	CreateTime time.Time `gorm:"autoCreateTime"`
 	UpdateTime time.Time `gorm:"autoUpdateTime"`
 }

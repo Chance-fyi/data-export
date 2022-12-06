@@ -9,7 +9,7 @@ type Database struct {
 	Password string
 	Database string
 	Charset  string
-	timeModel
+	TimeModel
 }
 
 func (Database) TableName() string {

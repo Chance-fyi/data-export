@@ -5,7 +5,7 @@ type UserSql struct {
 	UserId uint
 	SqlId  uint
 	Name   string
-	timeModel
+	TimeModel
 }
 
 func (UserSql) TableName() string {
