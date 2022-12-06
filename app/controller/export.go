@@ -4,7 +4,6 @@ import (
 	"data-export/app/api"
 	"data-export/app/service"
 	"data-export/pkg/app"
-	"data-export/pkg/console"
 	"data-export/pkg/response"
 	"data-export/pkg/validator"
 	"fmt"
@@ -45,9 +44,6 @@ func ExportDownload(ctx *gin.Context) {
 	_ = ctx.ShouldBind(&r)
 	e := service.ExportDownload(r)
 	_, err := os.Open(e.Path)
-	console.Logln(e)
-	console.Logln(r)
-	console.Logln(err)
 	if e.Path == "" || err != nil {
 		ctx.Redirect(http.StatusFound, "/404")
 		return
